@@ -2,6 +2,7 @@ package pl.edu.pw.fizyka.pojava.spiochy;
 
 import com.sun.tools.javac.Main;
 
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -11,7 +12,9 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class ParametersPanel extends JPanel {
 	
@@ -21,8 +24,10 @@ public class ParametersPanel extends JPanel {
 		"z pierwszeństwem przejazdu"
 	};
 	
-	JButton acceleration = new JButton("przyspieszenie pojazdów");
-	JButton reactionTime = new JButton("czas reakcji kierowców");
+	JLabel labAcceleration = new JLabel("Przyspieszenie pojazdów: ");
+	JLabel labReactionTime = new JLabel("Czas reakcji kierowców: ");
+	JTextField acceleration = new JTextField(); 
+	JTextField reactionTime = new JTextField();
 	JComboBox crossingType = new JComboBox(crossingString);
 	JButton updateParameters = new JButton("aktualizuj parametry");
 	
@@ -61,19 +66,31 @@ public class ParametersPanel extends JPanel {
 		gbc.insets = new Insets(5, 5, 5, 5);
 		gbc.gridx = 0;
 		gbc.gridy = 0;
-		this.add(acceleration, gbc);
+		this.add(labAcceleration, gbc);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 1;
-		this.add(reactionTime, gbc);
+		acceleration.setText("####");
+		acceleration.setFont(new Font("font",Font.BOLD, acceleration.getFont().getSize()+1));
+		this.add(acceleration, gbc);
 		
 		gbc.gridx = 0;
 		gbc.gridy = 2;
+		this.add(labReactionTime, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		reactionTime.setText("####");
+		reactionTime.setFont(new Font("font",Font.BOLD, reactionTime.getFont().getSize()+1));
+		this.add(reactionTime, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 4;
 		this.add(crossingType, gbc);
 		
 		gbc.insets = new Insets(500, 5, 5, 5);
 		gbc.gridx = 0;
-		gbc.gridy = 3;
+		gbc.gridy = 5;
 		this.add(updateParameters, gbc);
 	}
 
