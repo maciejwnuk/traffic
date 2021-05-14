@@ -14,7 +14,7 @@ public class MainFrame extends JFrame {
         this.setSize(WIDTH,HEIGHT);
         this.setResizable(false);
 
-        mainPanel = new MainPanel(0);
+        this.mainPanel = new MainPanel(IntersectionType.LIGHTS, 10);
 
         this.add(mainPanel, BorderLayout.CENTER);
 
@@ -25,10 +25,16 @@ public class MainFrame extends JFrame {
         this.setTitle("Symulacja ruchu drogowego");
         this.setVisible(true);
 
-        mainPanel.updateDimension();
+        this.mainPanel.updateDimension();
+    }
+
+    public void runSimulation() {
+        this.mainPanel.runSimulation(200, 10, 2);
     }
 
     public static void main(String[] args) {
         MainFrame mainFrame = new MainFrame();
+
+        mainFrame.runSimulation();
     }
 }

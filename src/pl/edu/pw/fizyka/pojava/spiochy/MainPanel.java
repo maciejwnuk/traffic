@@ -1,42 +1,23 @@
 package pl.edu.pw.fizyka.pojava.spiochy;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class MainPanel extends JPanel {
-    static final Color BG_COLOR = new Color(47, 138, 47);
-    static final Color STREET_COLOR = new Color(102,102,102);
-    static final Color LINE_COLOR = new Color(255,255,255);
+    World world;
+    double deltaTime;
 
-    static final int STREET_WIDTH = 50;
-    static final int LINE_WIDTH = 3;
+    public MainPanel(IntersectionType iType, double deltaTime) {
+        this.setBackground(new Color(47, 138, 47)); // Green as grass
 
-    int width;
-    int height;
+        this.deltaTime = deltaTime;
 
-    int intersectionType;
-
-    BufferedImage lightsImg;
-    BufferedImage rightImg;
-    BufferedImage rowImg;
-
-    public MainPanel(int iType) {
-        this.setBackground(BG_COLOR);
-
-        intersectionType = iType;
-
-        try {
-            lightsImg = ImageIO.read(new File("./assets/Lights.png"));
-            rightImg = ImageIO.read(new File("./assets/Right.png"));
-            rowImg = ImageIO.read(new File("./assets/Row.png"));
-        } catch (IOException e) {
-            System.out.println("Error occured during loading images.");
-            System.exit(1);
-        }
+        this.world = new World(
+                new Color(102,102,102),
+                new Color(255,255,255),
+                50,
+                3,
+                iType);
     }
 
     @Override
@@ -45,50 +26,54 @@ public class MainPanel extends JPanel {
 
         Graphics2D g2d = (Graphics2D) g;
 
-        this.paintStreets(g2d);
-        this.paintLines(g2d);
-
-        this.paintIntersectionIndicator(g2d);
-    }
-
-    private void paintStreets(Graphics2D g2d) {
-        g2d.setColor(STREET_COLOR);
-
-        g2d.fillRect(0, (height - STREET_WIDTH) / 2, width, STREET_WIDTH);
-        g2d.fillRect((width - STREET_WIDTH) / 2, 0, STREET_WIDTH, height);
-    }
-
-    private void paintLines(Graphics2D g2d) {
-        g2d.setColor(LINE_COLOR);
-
-        g2d.fillRect(0, (height - LINE_WIDTH) / 2, width, LINE_WIDTH);
-        g2d.fillRect((width - LINE_WIDTH) / 2, 0, LINE_WIDTH, height);
-    }
-
-    private void paintIntersectionIndicator(Graphics2D g2d) {
-        if (intersectionType == 0) {
-            g2d.drawImage(lightsImg, null, width / 2 + STREET_WIDTH, height / 2 - lightsImg.getHeight() - STREET_WIDTH);
-        } else if (intersectionType == 1) {
-            g2d.drawImage(rightImg, null, width / 2 + STREET_WIDTH, height / 2 - rightImg.getHeight() - STREET_WIDTH);
-        } else if (intersectionType == 2) {
-            g2d.drawImage(rowImg, null, width / 2 + STREET_WIDTH, height / 2 - rowImg.getHeight() - STREET_WIDTH);
-        }
+        this.world.draw(g2d);
     }
 
     public void updateDimension() {
-        Dimension dim = this.getSize();
-
-        width = dim.width;
-        height = dim.height;
+        this.world.setDimension(this.getSize());
 
         this.repaint();
         this.revalidate();
     }
 
-    public void setIntersectionType(int i) {
-        this.intersectionType = i;
+    public void setIntersectionType(int iType) {
+        this.world.setIntersectionType(IntersectionType.LIGHTS);
 
         this.repaint();
         this.revalidate();
+    }
+
+    // DeltaStepCount -> Co ile stepów pojawiają się samochody
+    // MaxSpawnCount -> Ile maksymalnie pojawień
+    // CarAmount -> Ile samochodów podczas pojawienia
+    // TODO: Poprawić nazewnictwo ;(
+    // TODO: Stop symulacji
+    public void runSimulation(int deltaStepCount, int maxSpawnCount, int carAmount) {
+        double duration = System.currentTimeMillis();
+        double lastFrame = 0;
+
+        int stepCount = 0;
+        int spawnCount = 0;
+
+        while (true) {
+            if (duration > this.deltaTime) {
+                lastFrame = System.currentTimeMillis();
+
+                this.world.step(this.deltaTime);
+                stepCount += 1;
+
+                if (stepCount % deltaStepCount == 0 && spawnCount < maxSpawnCount) {
+                    this.world.spawnCars(carAmount);
+                    spawnCount += 1;
+                }
+
+                this.repaint();
+                this.revalidate();
+
+                duration = 0;
+            } else {
+                duration = System.currentTimeMillis() - lastFrame;
+            }
+        }
     }
 }
