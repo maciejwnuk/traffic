@@ -26,14 +26,18 @@ public class ParametersPanel extends JPanel {
 	
 	JLabel labAcceleration = new JLabel("Przyspieszenie pojazdów: ");
 	JLabel labReactionTime = new JLabel("Czas reakcji kierowców: ");
+	JLabel labNumberOfCars = new JLabel("Liczba pojazdów w symulacji: ");
 	JTextField acceleration = new JTextField(); 
 	JTextField reactionTime = new JTextField();
+	JTextField numberOfCars = new JTextField();
 	JComboBox crossingType = new JComboBox(crossingString);
 	JButton updateParameters = new JButton("aktualizuj parametry");
 	
 	GridBagConstraints gbc = new GridBagConstraints();
 
 	MainPanel mainPanel;
+	
+	Parameters parameters = new Parameters(0.0, 0.0, 10);
 
 	public ParametersPanel(MainPanel mainPanel) {
 		this.mainPanel = mainPanel;
@@ -86,12 +90,47 @@ public class ParametersPanel extends JPanel {
 		
 		gbc.gridx = 0;
 		gbc.gridy = 4;
-		this.add(crossingType, gbc);
+		this.add(labNumberOfCars, gbc);
 		
-		gbc.insets = new Insets(500, 5, 5, 5);
 		gbc.gridx = 0;
 		gbc.gridy = 5;
+		numberOfCars.setText("####");
+		numberOfCars.setFont(new Font("font",Font.BOLD, reactionTime.getFont().getSize()+1));
+		this.add(numberOfCars, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 6;
+		this.add(crossingType, gbc);
+		
+		gbc.insets = new Insets(400, 5, 5, 5);
+		gbc.gridx = 0;
+		gbc.gridy = 7;
 		this.add(updateParameters, gbc);
+		
+		ActionListener updateListener = new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateParameters();
+			}
+		};
+		updateParameters.addActionListener(updateListener);
+	}
+	
+	public void updateParameters() {
+		String strAcceleration = acceleration.getText();
+		String strReactionTime = reactionTime.getText();
+		String strNumberOfCars = numberOfCars.getText();
+		
+		try {
+			double dAcceleration = Double.parseDouble(strAcceleration);
+			double dReactionTime = Double.parseDouble(strReactionTime);
+			int iNumberOfCars = Integer.parseInt(strNumberOfCars);
+			
+			parameters.updateParameters(dAcceleration, dReactionTime, iNumberOfCars);
+		} catch(Exception e) {
+			System.out.println("Error during updating parameters.");
+		}
 	}
 
 	public ParametersPanel(LayoutManager layout) {
