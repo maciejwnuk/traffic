@@ -17,6 +17,8 @@ public class World {
     public World(Parameters parameters) {
         this.parameters = parameters;
 
+        this.clearRoads();
+
         this.random = new Random();
     }
 
@@ -24,8 +26,14 @@ public class World {
         roadList.add(road);
     }
 
-    public void draw(Graphics2D g2d) {
+    public void clearRoads() {
+        this.roadList = new ArrayList<Road>();
+    }
 
+    public void draw(Graphics2D g2d) {
+        for (Road road: roadList) {
+            road.draw(g2d);
+        }
     }
 
     public void step() {

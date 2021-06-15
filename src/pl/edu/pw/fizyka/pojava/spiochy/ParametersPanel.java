@@ -1,16 +1,11 @@
 package pl.edu.pw.fizyka.pojava.spiochy;
 
-import com.sun.tools.javac.Main;
-
-import java.awt.Font;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class ParametersPanel extends JPanel {
 	public ParametersPanel(Parameters parameters) {
@@ -36,6 +31,29 @@ public class ParametersPanel extends JPanel {
 		carAmountField.setAlignmentX(CENTER_ALIGNMENT);
 		this.add(carAmountLabel);
 		this.add(carAmountField);
+
+		JLabel intersectionLabel = new JLabel("Rodzaj skrzyżowania");
+
+		DefaultListModel<String> listModel = new DefaultListModel<>();
+		listModel.add(0, "światła");
+		listModel.add(1, "równorzędne");
+		listModel.add(2, "z pierwszeństwem przejazdu");
+
+		JList<String> intersectionList = new JList(listModel);
+		intersectionList.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent e) {
+				if (intersectionList.getSelectedValue().equals("światła")) {
+					parameters.setIntersectionType(IntersectionType.LIGHTS);
+				} else if (intersectionList.getSelectedValue().equals("równorzędne")) {
+					parameters.setIntersectionType(IntersectionType.PEER);
+				} else if (intersectionList.getSelectedValue().equals("z pierwszeństwem przejazdu")) {
+					parameters.setIntersectionType(IntersectionType.ROW);
+				}
+			}
+		});
+
+		this.add(intersectionLabel);
+		this.add(intersectionList);
 
 		JButton updateBtn = new JButton("Aktualizuj parametry");
 		updateBtn.addActionListener(new ActionListener() {

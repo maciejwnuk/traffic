@@ -36,7 +36,7 @@ public class ControlPanel extends JPanel {
         restartBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mainPanel.restartSimulation();
-                switchBtn.setText("Launch simulation");
+                switchBtn.setText("Uruchom");
 
                 isRunning = false;
             }

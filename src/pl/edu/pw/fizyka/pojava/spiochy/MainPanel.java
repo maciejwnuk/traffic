@@ -7,7 +7,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainPanel extends JPanel {
-    Dimension dimension;
     World world;
     TimerTask simulationTask;
 
@@ -18,6 +17,8 @@ public class MainPanel extends JPanel {
     }
 
     public void rebuildWorld() {
+        world.clearRoads();
+
         Line2D vLine = new Line2D.Double(0., this.getHeight() / 2., this.getWidth(), this.getHeight() / 2.);
         Road vRoad = new Road(MainFrame.SPEED_LIMIT, vLine);
         world.addRoad(vRoad);
@@ -36,6 +37,8 @@ public class MainPanel extends JPanel {
     }
 
     public void startSimulation() {
+        this.rebuildWorld();
+
         Timer simulationTimer = new Timer();
 
         this.simulationTask = new TimerTask() {
