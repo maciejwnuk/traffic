@@ -17,16 +17,13 @@ public class Statistics {
 	
 	long median() {
 		measuredTimes.sort(null);
-		
-		if(measuredTimes.size() % 2 == 0) {
-			return (measuredTimes.get((measuredTimes.size()-1)/2) + measuredTimes.get(measuredTimes.size()/2) )/2 ;
-		}
-		
-		else {
-			return measuredTimes.get(measuredTimes.size()/2);
+
+		if (measuredTimes.size() % 2 == 0) {
+			return (measuredTimes.get((measuredTimes.size() - 1) / 2) + measuredTimes.get(measuredTimes.size() / 2)) / 2;
+		} else {
+			return measuredTimes.get(measuredTimes.size() / 2);
 		}
 	}
-	
 	
 	long variance() {
 		long sumavg = 0;
