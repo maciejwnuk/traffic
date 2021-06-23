@@ -2,7 +2,7 @@ package pl.edu.pw.fizyka.pojava.spiochy;
 
 import java.awt.geom.Point2D;
 
-public class PeerIntersection implements Intersection {
+public class LightsIntersection implements Intersection {
     Point2D.Double position;
 
     public void setPosition(Point2D.Double position) {
@@ -14,6 +14,6 @@ public class PeerIntersection implements Intersection {
     }
 
     public IntersectionType getType() {
-        return IntersectionType.PEER;
+        return IntersectionType.LIGHTS;
     }
 }

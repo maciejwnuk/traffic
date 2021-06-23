@@ -7,10 +7,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ControlPanel extends JPanel {
-    boolean isRunning;
 
     public ControlPanel(MainPanel mainPanel) {
-        this.isRunning = false;
+
+        JButton stepBtn = new JButton("Step");
+        stepBtn.setAlignmentX(CENTER_ALIGNMENT);
+        stepBtn.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                mainPanel.step();
+            }
+        });
+        this.add(stepBtn);
 
         JButton switchBtn = new JButton("Uruchom");
         JButton restartBtn = new JButton("Restart");
@@ -20,16 +27,16 @@ public class ControlPanel extends JPanel {
 
         switchBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (isRunning) {
+                if (mainPanel.isRunning()) {
                     mainPanel.pauseSimulation();
                     switchBtn.setText("Wznów");
-
-                    isRunning = false;
                 } else {
-                    mainPanel.startSimulation();
-                    switchBtn.setText("Zatrzymaj");
+                    if (!mainPanel.isCompleted())
+                        mainPanel.startSimulation();
+                    else
+                        mainPanel.resumeSimulation();
 
-                    isRunning = true;
+                    switchBtn.setText("Zatrzymaj");
                 }
             }
         });
@@ -37,8 +44,6 @@ public class ControlPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 mainPanel.restartSimulation();
                 switchBtn.setText("Uruchom");
-
-                isRunning = false;
             }
         });
 

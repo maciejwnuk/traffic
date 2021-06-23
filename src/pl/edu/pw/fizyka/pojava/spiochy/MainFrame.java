@@ -9,10 +9,6 @@ public class MainFrame extends JFrame {
 
     static final double DELTA_TIME = 1. / 60.;
 
-    static final double SPEED_LIMIT = 50.;
-
-    static final double STREET_WIDTH = 25.;
-
     public MainFrame() throws HeadlessException {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         this.setSize(WIDTH,HEIGHT);

@@ -1,81 +1,94 @@
 package pl.edu.pw.fizyka.pojava.spiochy;
 
+import pl.edu.pw.fizyka.pojava.spiochy.math.SpawnPoint2D;
+import pl.edu.pw.fizyka.pojava.spiochy.math.Vector2D;
+
 import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Car {
-    int x;
-    int y;
+    static final double LENGTH = 40.;
+    static final double WIDTH = Road.WIDTH / 3 * 2;
 
+    Point2D position;
+    Vector2D direction;
     double velocity;
 
+    Point2D targetPoint;
+    Iterator<Point2D> routeIter;
+    boolean finished;
+
     Color color;
-    CarState state;
-    TurnDirection turnDirection;
-    DriveDirection driveDirection;
 
-    public Car(int x, int y, Color color, DriveDirection driveDirection, TurnDirection turnDirection) {
-        this.x = x;
-        this.y = y;
+    public Car(SpawnPoint2D spawnPoint, ArrayList<Point2D> route, Color color) {
+        this.position = spawnPoint.getPosition();
+        this.direction = spawnPoint.getDirection();
+        this.velocity = 50.;
         this.color = color;
-        this.driveDirection = driveDirection;
-        this.turnDirection = turnDirection;
-
-        this.velocity = 0.1;
+        this.routeIter = route.iterator();
+        // first point fix :/
+        routeIter.next();
+        this.targetPoint = routeIter.next();
+        this.finished = false;
     }
 
-    public double getVelocity() {
-        return velocity;
+    public void draw(Graphics2D g2d) {
+        double theta = direction.getAngle();
+
+        AffineTransform originalTransform = g2d.getTransform();
+
+        g2d.setColor(color);
+        g2d.translate(position.getX(), position.getY());
+        g2d.rotate(theta);
+        g2d.fillRect((int) -Car.LENGTH / 2,
+                     (int) -Car.WIDTH / 2,
+                     (int) Car.LENGTH,
+                     (int) Car.WIDTH);
+
+        g2d.setTransform(originalTransform);
     }
 
-    public void setVelocity(double velocity) {
-        this.velocity = velocity;
+    public void move() {
+        double deltaLength = velocity * MainFrame.DELTA_TIME;
+
+        direction = new Vector2D(targetPoint.getX() - position.getX(), targetPoint.getY() - position.getY());
+        direction.normalize();
+
+        direction.multiply(deltaLength);
+
+        Point2D oldPosition = new Point2D.Double(position.getX(), position.getY());
+
+        position.setLocation(position.getX() + direction.getX(), position.getY() + direction.getY());
+
+        // Curve fever ..
+        while (
+            (targetPoint.getX() >= oldPosition.getX() && targetPoint.getX() <= position.getX() && targetPoint.getY() >= position.getY() && targetPoint.getY() <= oldPosition.getY())
+            || (targetPoint.getX() >= position.getX() && targetPoint.getX() <= oldPosition.getX() && targetPoint.getY() >= position.getY() && targetPoint.getY() <= oldPosition.getY())
+            || (targetPoint.getX() >= oldPosition.getX() && targetPoint.getX() <= position.getX() && targetPoint.getY() >= oldPosition.getY() && targetPoint.getY() <= position.getY())
+            || (targetPoint.getX() >= position.getX() && targetPoint.getX() <= oldPosition.getX() && targetPoint.getY() >= oldPosition.getY() && targetPoint.getY() <= position.getY())
+        ) {
+            if (!routeIter.hasNext()) {
+                finished = true;
+                break;
+            }
+
+            targetPoint = routeIter.next();
+        }
     }
 
-    public CarState getState() {
-        return state;
+    public boolean hasFinished() {
+        return finished;
     }
 
-    public void setState(CarState state) {
-        this.state = state;
+    public void slowDown(double deceleration) {
+        velocity -= deceleration;
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public TurnDirection getTurnDirection() {
-        return turnDirection;
-    }
-
-    public void setTurnDirection(TurnDirection turnDirection) {
-        this.turnDirection = turnDirection;
-    }
-
-    public DriveDirection getDriveDirection() {
-        return driveDirection;
-    }
-
-    public void setDriveDirection(DriveDirection driveDirection) {
-        this.driveDirection = driveDirection;
+    public void speedUp(double acceleration) {
+        if (velocity + acceleration < Road.SPEED_LIMIT)
+            velocity += acceleration;
     }
 }

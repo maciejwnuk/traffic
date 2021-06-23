@@ -5,8 +5,7 @@ package pl.edu.pw.fizyka.pojava.spiochy.math;
 
 public class Vector2D {
 
-    public double x;
-    public double y;
+    double x, y;
 
     public Vector2D() { }
 
@@ -50,6 +49,14 @@ public class Vector2D {
         vx -= x;
         vy -= y;
         return (vx * vx + vy * vy);
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
     }
 
     public double distanceSq(Vector2D v) {
