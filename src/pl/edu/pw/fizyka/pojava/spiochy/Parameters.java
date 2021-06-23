@@ -2,13 +2,13 @@ package pl.edu.pw.fizyka.pojava.spiochy;
 
 class Parameters {
     double acceleration;
-    double reactionTime;
+    double brakingPower;
     int carAmount;
     IntersectionType intersectionType;
 
-    public Parameters(double acceleration, double reactionTime, int carAmount, IntersectionType intersectionType) {
+    public Parameters(double acceleration, double brakingPower, int carAmount, IntersectionType intersectionType) {
         this.acceleration = acceleration;
-        this.reactionTime = reactionTime;
+        this.brakingPower = brakingPower;
         this.carAmount = carAmount;
         this.intersectionType = intersectionType;
     }
@@ -21,12 +21,12 @@ class Parameters {
         this.acceleration = acceleration;
     }
 
-    public double getReactionTime() {
-        return reactionTime;
+    public double getBrakingPower() {
+        return brakingPower;
     }
 
-    public void setReactionTime(double reactionTime) {
-        this.reactionTime = reactionTime;
+    public void setBrakingPower(double brakingPower) {
+        this.brakingPower = brakingPower;
     }
 
     public int getCarAmount() {
@@ -41,7 +41,7 @@ class Parameters {
         return intersectionType;
     }
 
-    public void setIntersectionType(IntersectionType intersectionType) {
-        this.intersectionType = intersectionType;
-    }
+//    public void setIntersectionType(IntersectionType intersectionType) {
+//        this.intersectionType = intersectionType;
+//    }
 }

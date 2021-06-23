@@ -17,12 +17,13 @@ public class World {
     Intersection intersection;
 
     Parameters parameters;
+    Statistics statistics;
 
     Random random;
 
-    public World(Parameters parameters) {
+    public World(Parameters parameters, Statistics statistics) {
         this.parameters = parameters;
-        this.carsLeft = parameters.getCarAmount();
+        this.statistics = statistics;
 
         this.clearRoads();
 
@@ -62,6 +63,7 @@ public class World {
     }
 
     public void clearRoads() {
+        this.carsLeft = parameters.getCarAmount();
         this.roadList = new ArrayList<>();
         this.carList = new ArrayList<>();
     }
@@ -265,16 +267,35 @@ public class World {
 
     public void step() {
         ArrayList<Car> carsToDrop = new ArrayList<>();
+        Point2D iPos = this.intersection.getPosition();
 
         for (Car car: carList) {
+            // Check if is near intersection && going too quick
+            if (car.getPosition().getX() > iPos.getX() - Road.WIDTH * 2
+                    && car.getPosition().getX() < iPos.getX() + Road.WIDTH * 2
+                    && car.getPosition().getY() > iPos.getY() - Road.WIDTH * 2
+                    && car.getPosition().getY() < iPos.getY() + Road.WIDTH * 2
+                    && car.getVelocity() > Road.SPEED_LIMIT / 2) {
+                car.slowDown(car.getVelocity() * parameters.getBrakingPower());
+            } else {
+                car.speedUp(parameters.getAcceleration()); // Accelerate to road limit
+            }
+
             car.move();
 
-            if (car.hasFinished())
+            if (car.hasFinished()) {
                 carsToDrop.add(car);
+            }
         }
 
         for (Car car: carsToDrop) {
+            statistics.addEntry(car.getTimeElapsed());
+
             carList.remove(car);
+            carsLeft -= 1;
+
+            if (!hasFinished())
+                spawnCar(roadList.get(random.nextInt(2)));
         }
     }
 

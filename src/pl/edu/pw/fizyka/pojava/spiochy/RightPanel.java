@@ -4,13 +4,19 @@ import javax.swing.*;
 import java.awt.*;
 
 public class RightPanel extends JPanel {
-	public RightPanel(MainPanel mainPanel) {
+	StatisticsPanel statsPanel;
+
+	public RightPanel(MainPanel mainPanel, Statistics statistics) {
 		this.setLayout(new BorderLayout());
 
-		StatisticsPanel statsPanel = new StatisticsPanel();
+		statsPanel = new StatisticsPanel(statistics);
 		ControlPanel ctrlPanel = new ControlPanel(mainPanel);
 
 		this.add(statsPanel, BorderLayout.PAGE_START);
 		this.add(ctrlPanel, BorderLayout.PAGE_END);
+	}
+
+	public StatisticsPanel getStatsPanel() {
+		return statsPanel;
 	}
 }

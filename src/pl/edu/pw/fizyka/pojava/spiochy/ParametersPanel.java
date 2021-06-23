@@ -18,12 +18,12 @@ public class ParametersPanel extends JPanel {
 		this.add(accelerationLabel);
 		this.add(accelerationField);
 
-		JLabel reactionTimeLabel = new JLabel("Czas reakcji kierowcy");
-		JTextField reactionTimeField = new JTextField(String.valueOf(parameters.getReactionTime()));
-		reactionTimeLabel.setAlignmentX(CENTER_ALIGNMENT);
-		reactionTimeField.setAlignmentX(CENTER_ALIGNMENT);
-		this.add(reactionTimeLabel);
-		this.add(reactionTimeField);
+		JLabel brakingPowerLabel = new JLabel("Moc hamulców");
+		JTextField brakingPowerField = new JTextField(String.valueOf(parameters.getBrakingPower()));
+		brakingPowerLabel.setAlignmentX(CENTER_ALIGNMENT);
+		brakingPowerField.setAlignmentX(CENTER_ALIGNMENT);
+		this.add(brakingPowerLabel);
+		this.add(brakingPowerField);
 
 		JLabel carAmountLabel = new JLabel("Ilość pojazdów");
 		JTextField carAmountField = new JTextField(String.valueOf(parameters.getCarAmount()));
@@ -32,34 +32,34 @@ public class ParametersPanel extends JPanel {
 		this.add(carAmountLabel);
 		this.add(carAmountField);
 
-		JLabel intersectionLabel = new JLabel("Rodzaj skrzyżowania");
-
-		DefaultListModel<String> listModel = new DefaultListModel<>();
-		listModel.add(0, "światła");
-		listModel.add(1, "równorzędne");
-		listModel.add(2, "z pierwszeństwem przejazdu");
-
-		JList<String> intersectionList = new JList(listModel);
-		intersectionList.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				if (intersectionList.getSelectedValue().equals("światła")) {
-					parameters.setIntersectionType(IntersectionType.LIGHTS);
-				} else if (intersectionList.getSelectedValue().equals("równorzędne")) {
-					parameters.setIntersectionType(IntersectionType.PEER);
-				} else if (intersectionList.getSelectedValue().equals("z pierwszeństwem przejazdu")) {
-					parameters.setIntersectionType(IntersectionType.ROW);
-				}
-			}
-		});
-
-		this.add(intersectionLabel);
-		this.add(intersectionList);
+//		JLabel intersectionLabel = new JLabel("Rodzaj skrzyżowania");
+//
+//		DefaultListModel<String> listModel = new DefaultListModel<>();
+//		listModel.add(0, "światła");
+//		listModel.add(1, "równorzędne");
+//		listModel.add(2, "z pierwszeństwem przejazdu");
+//
+//		JList<String> intersectionList = new JList(listModel);
+//		intersectionList.addListSelectionListener(new ListSelectionListener() {
+//			public void valueChanged(ListSelectionEvent e) {
+//				if (intersectionList.getSelectedValue().equals("światła")) {
+//					parameters.setIntersectionType(IntersectionType.LIGHTS);
+//				} else if (intersectionList.getSelectedValue().equals("równorzędne")) {
+//					parameters.setIntersectionType(IntersectionType.PEER);
+//				} else if (intersectionList.getSelectedValue().equals("z pierwszeństwem przejazdu")) {
+//					parameters.setIntersectionType(IntersectionType.ROW);
+//				}
+//			}
+//		});
+//
+//		this.add(intersectionLabel);
+//		this.add(intersectionList);
 
 		JButton updateBtn = new JButton("Aktualizuj parametry");
 		updateBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				parameters.setAcceleration(Double.parseDouble(accelerationField.getText()));
-				parameters.setReactionTime(Double.parseDouble(reactionTimeField.getText()));
+				parameters.setBrakingPower(Double.parseDouble(brakingPowerField.getText()));
 				parameters.setCarAmount(Integer.parseInt(carAmountField.getText()));
 			}
 		});

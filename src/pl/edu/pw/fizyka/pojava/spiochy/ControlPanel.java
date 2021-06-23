@@ -10,15 +10,6 @@ public class ControlPanel extends JPanel {
 
     public ControlPanel(MainPanel mainPanel) {
 
-        JButton stepBtn = new JButton("Step");
-        stepBtn.setAlignmentX(CENTER_ALIGNMENT);
-        stepBtn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                mainPanel.step();
-            }
-        });
-        this.add(stepBtn);
-
         JButton switchBtn = new JButton("Uruchom");
         JButton restartBtn = new JButton("Restart");
 

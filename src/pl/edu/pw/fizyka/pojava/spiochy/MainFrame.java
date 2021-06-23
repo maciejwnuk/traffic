@@ -14,15 +14,22 @@ public class MainFrame extends JFrame {
         this.setSize(WIDTH,HEIGHT);
         this.setResizable(false);
 
-        Parameters parameters = new Parameters(1., 1., 10, IntersectionType.LIGHTS);
+        Parameters parameters = new Parameters(1., 0.1, 10, IntersectionType.LIGHTS);
+        Statistics statistics = new Statistics();
 
-        MainPanel mainPanel = new MainPanel(parameters);
+        MainPanel mainPanel = new MainPanel(parameters, statistics);
 
         this.add(mainPanel, BorderLayout.CENTER);
 
         this.add(new LeftPanel(parameters), BorderLayout.LINE_START);
 
-        this.add(new RightPanel(mainPanel), BorderLayout.LINE_END);
+        RightPanel rightPanel = new RightPanel(mainPanel, statistics);
+
+        this.add(rightPanel, BorderLayout.LINE_END);
+
+        StatisticsPanel statisticsPanel = rightPanel.getStatsPanel();
+
+        mainPanel.setStatsPanel(statisticsPanel);
 
         this.setTitle("Symulacja ruchu drogowego");
         this.setVisible(true);

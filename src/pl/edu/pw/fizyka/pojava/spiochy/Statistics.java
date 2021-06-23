@@ -4,18 +4,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Statistics {
-	List<Long> measuredTimes = new ArrayList<Long>();
+	List<Double> measuredTimes;
 
-	long averageTime() {
-		long sum = 0;
+	public Statistics() {
+		this.measuredTimes = new ArrayList<>();
+	}
+
+	public void addEntry(double time) {
+		measuredTimes.add(time);
+	}
+
+	public double averageTime() {
+		if (measuredTimes.isEmpty())
+			return 0;
+
+		double sum = 0;
+
 		for(int i=0; i<measuredTimes.size(); i++) {
 			sum = sum + measuredTimes.get(i);
 		}
 		
 		return (sum/measuredTimes.size());
 	}
-	
-	long median() {
+
+	public double median() {
+		if (measuredTimes.isEmpty())
+			return 0;
+
 		measuredTimes.sort(null);
 
 		if (measuredTimes.size() % 2 == 0) {
@@ -24,10 +39,13 @@ public class Statistics {
 			return measuredTimes.get(measuredTimes.size() / 2);
 		}
 	}
-	
-	long variance() {
-		long sumavg = 0;
-		long sumtot = 0;
+
+	public double variance() {
+		if (measuredTimes.isEmpty())
+			return 0;
+
+		double sumavg = 0;
+		double sumtot = 0;
 		
 		for(int i=0; i<measuredTimes.size(); i++) {
 			sumavg = sumavg + measuredTimes.get(i);

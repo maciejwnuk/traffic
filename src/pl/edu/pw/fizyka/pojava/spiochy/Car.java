@@ -19,20 +19,23 @@ public class Car {
 
     Point2D targetPoint;
     Iterator<Point2D> routeIter;
+
     boolean finished;
+    double timeElapsed;
 
     Color color;
 
     public Car(SpawnPoint2D spawnPoint, ArrayList<Point2D> route, Color color) {
         this.position = spawnPoint.getPosition();
         this.direction = spawnPoint.getDirection();
-        this.velocity = 50.;
+        this.velocity = 0.;
         this.color = color;
         this.routeIter = route.iterator();
         // first point fix :/
         routeIter.next();
         this.targetPoint = routeIter.next();
         this.finished = false;
+        this.timeElapsed = 0;
     }
 
     public void draw(Graphics2D g2d) {
@@ -51,7 +54,12 @@ public class Car {
         g2d.setTransform(originalTransform);
     }
 
+    public double getTimeElapsed() {
+        return timeElapsed;
+    }
+
     public void move() {
+        timeElapsed += MainFrame.DELTA_TIME;
         double deltaLength = velocity * MainFrame.DELTA_TIME;
 
         direction = new Vector2D(targetPoint.getX() - position.getX(), targetPoint.getY() - position.getY());
@@ -83,8 +91,19 @@ public class Car {
         return finished;
     }
 
+    public double getVelocity() {
+        return velocity;
+    }
+
+    public Point2D getPosition() {
+        return position;
+    }
+
     public void slowDown(double deceleration) {
-        velocity -= deceleration;
+        if (velocity - deceleration < 0)
+            velocity = 0;
+        else
+            velocity -= deceleration;
     }
 
     public void speedUp(double acceleration) {

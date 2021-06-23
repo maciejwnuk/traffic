@@ -14,13 +14,19 @@ public class MainPanel extends JPanel {
     boolean completed;
     boolean hasBeenBuilt;
 
-    public MainPanel(Parameters parameters) {
+    StatisticsPanel statsPanel;
+
+    public MainPanel(Parameters parameters, Statistics statistics) {
         this.setBackground(new Color(47, 138, 47)); // Green as grass
 
-        this.world = new World(parameters);
+        this.world = new World(parameters, statistics);
         this.running = false;
         this.completed = false;
         this.hasBeenBuilt = false;
+    }
+
+    public void setStatsPanel(StatisticsPanel statsPanel) {
+        this.statsPanel = statsPanel;
     }
 
     public void rebuildWorld() {
@@ -59,16 +65,19 @@ public class MainPanel extends JPanel {
                 repaint();
                 revalidate();
 
+                statsPanel.update();
+
                 if (world.hasFinished()) {
-                    this.cancel();
                     completed = true;
+                    running = false;
+                    this.cancel();
                 }
             }
         };
 
         simulationTimer.scheduleAtFixedRate(this.simulationTask, 0, (long) (MainFrame.DELTA_TIME * 1000.));
 
-        this.running = true;
+        running = true;
         completed = false;
     }
 
@@ -100,12 +109,5 @@ public class MainPanel extends JPanel {
 
     public boolean isCompleted() {
         return completed;
-    }
-
-    public void step() {
-        world.step();
-
-        repaint();
-        revalidate();
     }
 }
