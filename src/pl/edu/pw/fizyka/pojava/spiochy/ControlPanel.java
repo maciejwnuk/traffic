@@ -8,9 +8,12 @@ import java.awt.event.ActionListener;
 
 public class ControlPanel extends JPanel {
 
-    public ControlPanel(MainPanel mainPanel) {
+    Lang lang;
 
-        JButton switchBtn = new JButton("Uruchom");
+    public ControlPanel(MainPanel mainPanel) {
+        lang = new Lang();
+
+        JButton switchBtn = new JButton(lang.rb.getString("run"));
         JButton restartBtn = new JButton("Restart");
 
         switchBtn.setAlignmentX(CENTER_ALIGNMENT);
@@ -20,21 +23,21 @@ public class ControlPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 if (mainPanel.isRunning()) {
                     mainPanel.pauseSimulation();
-                    switchBtn.setText("Wznów");
+                    switchBtn.setText(lang.rb.getString("resume"));
                 } else {
                     if (!mainPanel.isCompleted())
                         mainPanel.startSimulation();
                     else
                         mainPanel.resumeSimulation();
 
-                    switchBtn.setText("Zatrzymaj");
+                    switchBtn.setText(lang.rb.getString("stop"));
                 }
             }
         });
         restartBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 mainPanel.restartSimulation();
-                switchBtn.setText("Uruchom");
+                switchBtn.setText(lang.rb.getString("run"));
             }
         });
 
